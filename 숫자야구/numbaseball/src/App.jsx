@@ -23,12 +23,15 @@ class App extends Component {
   onSubmitForm = (e) => {
     e.preventDefault();
     if (this.state.value === this.state.answer.join('')) {
-      this.setState({
-        result: '홈런',
-        tries: [
-          ...this.state.tries /*리엑트에서는 복사 해줘서 사용한다 push 대신*/,
-          { try: this.state.value, result: '홈런!' },
-        ],
+      this.setState((prevState) => {
+        return {
+          result: '홈런',
+          tries: [
+            ...this.prevState
+              .tries /*리엑트에서는 복사 해줘서 사용한다 push 대신*/,
+            { try: this.state.value, result: '홈런!' },
+          ],
+        };
       });
       setTimeout(() => {
         alert('게임을 다시 시작합니다!');
@@ -65,15 +68,17 @@ class App extends Component {
             ball += 1;
           }
         }
-        this.setState({
-          tries: [
-            ...this.state.tries,
-            {
-              try: this.state.value,
-              result: `${strike} 스트라이크, ${ball} 볼입니다`,
-              value: '',
-            },
-          ],
+        this.setState((prevState) => {
+          return {
+            tries: [
+              ...this.prevState.tries,
+              {
+                try: this.state.value,
+                result: `${strike} 스트라이크, ${ball} 볼입니다`,
+                value: '',
+              },
+            ],
+          };
         });
       }
     }
